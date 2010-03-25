@@ -1,0 +1,55 @@
+<html>
+<head>
+  	<script src="http://localhost:3000/APITestRaw/jquery.js"></script>
+	<script src="http://localhost:3000/APITestRaw/jquerycookie.js"></script>
+</head>
+<body>
+<script>
+ 
+	/* Properties
+	____________________________________________________________________________ */
+	
+	var token;
+	$.ajaxSetup({async:false});
+ 
+	/* Authenticate
+	____________________________________________________________________________ */
+ 
+	$.ajax({
+		url: "http://localhost:3000/sessions",
+		data: {user_name: "ronze", password: "Enurmadsen1"},
+		type: 'POST',
+		complete: function(request, textStatus) 
+		{
+			token = $.cookie('rftr_session_token');
+		}
+	});
+	
+	/* Post new child
+	____________________________________________________________________________ */
+ 
+	/* Get list of children
+	____________________________________________________________________________ */
+	
+	$.ajax({
+		url: "http://localhost:3000/children",
+	  	dataType: 'xml',
+		beforeSend: function(request)
+		{
+			request.setRequestHeader('Authorization', "RFTR_Token " + token);
+		},
+	  	success: function(response)
+		{
+			alert(response.toSource());
+	    }
+	});
+ 
+</script>
+ 
+ 
+<div id="textbox">
+ 
+</div>
+ 
+</body>
+</html>
