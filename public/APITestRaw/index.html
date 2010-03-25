@@ -27,6 +27,21 @@
 	
 	/* Post new child
 	____________________________________________________________________________ */
+	
+	$.ajax({
+		url: "http://localhost:3000/children",
+		//dataType: 'xml',
+		type: 'POST',
+		data: {  child: {name: "apichild", last_known_location: "New York City", photo: "empty.jpg"}},
+		beforeSend: function(request)
+		{
+			request.setRequestHeader('Authorization', "RFTR_Token " + token);
+		},
+		success: function(response)
+		{
+			//alert(response.toSource());
+	    }
+	});
  
 	/* Get list of children
 	____________________________________________________________________________ */
@@ -40,7 +55,7 @@
 		},
 	  	success: function(response)
 		{
-			alert(response.toSource());
+			//alert(response.toSource());
 	    }
 	});
  
