@@ -10,6 +10,8 @@
 	____________________________________________________________________________ */
 	
 	var token;
+	var childid;
+	
 	$.ajaxSetup({async:false});
  
 	/* Authenticate
@@ -19,6 +21,7 @@
 		url: "http://localhost:3000/sessions",
 		data: {user_name: "ronze", password: "Enurmadsen1"},
 		type: 'POST',
+		cache: false,
 		complete: function(request, textStatus) 
 		{
 			token = $.cookie('rftr_session_token');
@@ -30,16 +33,17 @@
 	
 	$.ajax({
 		url: "http://localhost:3000/children",
-		//dataType: 'xml',
+		dataType: 'json',
 		type: 'POST',
+		cache: false,
 		data: {  child: {name: "apichild", last_known_location: "New York City", photo: "empty.jpg"}},
 		beforeSend: function(request)
 		{
 			request.setRequestHeader('Authorization', "RFTR_Token " + token);
 		},
-		success: function(response)
+		success: function(data)
 		{
-			//alert(response.toSource());
+			childid = data._id
 	    }
 	});
  
@@ -48,12 +52,67 @@
 	
 	$.ajax({
 		url: "http://localhost:3000/children",
-	  	dataType: 'xml',
+	  	dataType: 'json',
+		cache: false,
 		beforeSend: function(request)
 		{
 			request.setRequestHeader('Authorization', "RFTR_Token " + token);
 		},
 	  	success: function(response)
+		{
+			//alert(response.toSource());
+	    }
+	});
+	
+	/* Get single child
+	____________________________________________________________________________ */
+	
+	$.ajax({
+		url: "http://localhost:3000/children/" + childid,
+	  	dataType: 'json',
+		cache: false,
+		beforeSend: function(request)
+		{
+			request.setRequestHeader('Authorization', "RFTR_Token " + token);
+		},
+	  	success: function(response)
+		{
+			//alert(response.toSource());
+	    }
+	});
+	
+	/* Update child
+	____________________________________________________________________________ */
+	
+	$.ajax({
+		url: "http://localhost:3000/children/" + childid,
+		dataType: 'json',
+		type: 'PUT',
+		cache: false,
+		data: {  child: {name: "apichild renamed"} },
+		beforeSend: function(request)
+		{
+			request.setRequestHeader('Authorization', "RFTR_Token " + token);
+		},
+		success: function(data)
+		{
+			//alert(response.toSource());
+	    }
+	});
+	
+	/* Delete child
+	____________________________________________________________________________ */
+	
+	$.ajax({
+		url: "http://localhost:3000/children/" + childid,
+		dataType: 'json',
+		type: 'DELETE',
+		cache: false,
+		beforeSend: function(request)
+		{
+			request.setRequestHeader('Authorization', "RFTR_Token " + token);
+		},
+		success: function(data)
 		{
 			//alert(response.toSource());
 	    }
